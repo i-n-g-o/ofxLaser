@@ -215,20 +215,19 @@ void DacIDN :: sendFrameToDac() {
 			// Conf 6... blank zeros???
 			output.push_back(0x00);
 			output.push_back(0x00);
-		
-			
-			
-			// Data header
-			// Flags - if bit 1 is set then frame is played once, otherwise it repeats
-			output.push_back(0x01);
-			
-			// THIS IS WHAT SETS THE POINT SPEED ------------------------
-			// Then it's the frame duration in microseconds, should be number of points/point rate
-			int framemicros = (((uint64_t)(numPointsToSend - 1)) * 1000000ull) / (uint64_t)pps;
-			output.push_back((uint8_t) (framemicros >> 16));
-			output.push_back((uint8_t) (framemicros >> 8));
-			output.push_back((uint8_t) (framemicros));
 		}
+		
+		// Data header
+		// Flags - if bit 1 is set then frame is played once, otherwise it repeats
+		output.push_back(0x01);
+		
+		// THIS IS WHAT SETS THE POINT SPEED ------------------------
+		// Then it's the frame duration in microseconds, should be number of points/point rate
+		int framemicros = (((uint64_t)(numPointsToSend - 1)) * 1000000ull) / (uint64_t)pps;
+		output.push_back((uint8_t) (framemicros >> 16));
+		output.push_back((uint8_t) (framemicros >> 8));
+		output.push_back((uint8_t) (framemicros));
+		
 		
 		//DATA START!
 		// now it's points! 7 bytes per point :

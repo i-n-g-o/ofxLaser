@@ -274,6 +274,38 @@ void DacIDN :: sendFrameToDac() {
 	
 }
 
-void DacIDN :: close() {
+bool DacIDN::setColourShift(float shift)
+{
+	if(!isThreadRunning())
+	{
+		colourShift = shift;
+		return true;
+	}
+	
+	if(lock())
+	{
+		colourShift = shift;
+		unlock();
+		return true;
+	}
+	
+	return false;
+}
+
+void DacIDN::reset()
+{
+	if(lock())
+	{
+		resetFlag = true;
+		unlock();
+	}
+}
+
+void DacIDN :: close()
+{
+	if(!connected) return;
+	
+	waitForThread();
+	
 	udpConnection.Close();
 }
